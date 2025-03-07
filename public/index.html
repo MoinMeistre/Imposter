@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imposter Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Imposter Game</h1>
+
+    <section id="setup">
+        <h2>Begriffe eingeben</h2>
+        <input type="text" id="item-input" placeholder="Begriff eingeben">
+        <button onclick="addItem()">Hinzufügen</button>
+        <ul id="item-list"></ul>
+
+        <h2>Mitspieler eingeben</h2>
+        <input type="text" id="player-input" placeholder="Spielername eingeben">
+        <button onclick="addPlayer()">Hinzufügen</button>
+        <ul id="player-list"></ul>
+
+        <button onclick="startGame()">Spiel starten</button>
+    </section>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
