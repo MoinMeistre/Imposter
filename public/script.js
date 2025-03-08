@@ -47,3 +47,21 @@ socket.on('gameResult', (data) => {
 socket.on('gameStarted', () => {
     alert('Das Spiel hat begonnen!');
 });
+
+
+// Neues Spiel starten (an den Server senden)
+function resetGame() {
+    socket.emit('resetGame');
+}
+
+// Event-Listener für "Neues Spiel starten"
+document.getElementById('reset-game').addEventListener('click', resetGame);
+
+// Spielfeld zurücksetzen, wenn vom Server ausgelöst
+socket.on('gameReset', () => {
+    document.getElementById('item-list').innerHTML = '';
+    document.getElementById('player-list').innerHTML = '';
+    document.getElementById('setup').style.display = 'block';
+    document.getElementById('players').style.display = 'none';
+    document.getElementById('result').style.display = 'none';
+});

@@ -69,6 +69,16 @@ io.on('connection', (socket) => {
         }
     });
 
+
+// Neues Spiel starten (zurücksetzen)
+socket.on('resetGame', () => {
+    players = [];
+    items = [];
+    gameStarted = false;
+    io.emit('gameReset'); // Allen Spielern mitteilen, dass das Spiel zurückgesetzt wurde
+});
+
+
     // Spieler trennen
     socket.on('disconnect', () => {
         players = players.filter((player) => player.id !== socket.id);
