@@ -16,6 +16,18 @@ function addItem() {
     }
 }
 
+
+
+// Begriffe zurücksetzen (an den Server senden)
+function resetItems() {
+    socket.emit('resetItems');
+}
+
+// Event-Listener für den Reset-Button
+document.getElementById('reset-items').addEventListener('click', resetItems);
+
+
+
 function addPlayer() {
     const player = document.getElementById('player-input').value.trim();
     if (player) {

@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const fs = require('fs'); // <-- Neu für Dateispeicherung
 
 // Initialisiere den Express-Server
 const app = express();
@@ -9,8 +10,11 @@ const io = new Server(server);
 
 // Spiel-Daten speichern
 let players = [];
-let items = [];
 let gameStarted = false;
+
+// Begriffe aus Datei laden (oder leere Liste, wenn Datei fehlt)
+const itemsFile = './public/items.json';
+let items = fs.existsSync(itemsFile) ? JSON.parse(fs.readFileSync(itemsFile)) : [];
 
 // Statische Dateien bereitstellen (deine Website)
 app.use(express.static('public'));
@@ -27,13 +31,24 @@ io.on('connection', (socket) => {
         }
     });
 
-    // Begriffe hinzufügen
+    // Begriffe hinzufügen und in Datei speichern
     socket.on('addItem', (item) => {
         if (!gameStarted) {
             items.push(item);
+            fs.writeFileSync(itemsFile, JSON.stringify(items)); // Begriffe speichern
             io.emit('updateItems', items); // Begriffe synchronisieren
         }
     });
+
+    // Begriffe zurücksetzen (löschen)
+    socket.on('resetItems', () => {
+        items = []; // Liste leeren
+        fs.writeFileSync(itemsFile, JSON.stringify(items)); // Datei aktualisieren
+        io.emit('updateItems', items); // Allen Spielern die leere Liste senden
+    });
+
+    // Beim Verbinden die aktuelle Begriffe-Liste senden
+    socket.emit('updateItems', items);
 
     // Spiel starten
     socket.on('startGame', () => {
@@ -57,7 +72,7 @@ io.on('connection', (socket) => {
     // Spieler trennen
     socket.on('disconnect', () => {
         players = players.filter((player) => player.id !== socket.id);
-        io.emit('updatePlayers', players); // Aktualisierte Spieler-Liste
+        io.emit('updatePlayers', players);
     });
 });
 
