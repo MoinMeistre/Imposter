@@ -53,9 +53,16 @@ socket.on('gameStarted', () => {
 function resetGame() {
     socket.emit('resetGame');
 }
+// DOMContentLoaded-Event-Listener hinzufügen
+document.addEventListener('DOMContentLoaded', () => {
+    const resetButton = document.getElementById('reset-game');
+    if (resetButton) {
+        resetButton.addEventListener('click', resetGame);
+    } else {
+        console.error('Button "Neues Spiel starten" nicht gefunden!');
+    }
+});
 
-// Event-Listener für "Neues Spiel starten"
-document.getElementById('reset-game').addEventListener('click', resetGame);
 
 // Spielfeld zurücksetzen, wenn vom Server ausgelöst
 socket.on('gameReset', () => {
@@ -65,3 +72,6 @@ socket.on('gameReset', () => {
     document.getElementById('players').style.display = 'none';
     document.getElementById('result').style.display = 'none';
 });
+
+// Event-Listener für "Neues Spiel starten"
+document.getElementById('reset-game').addEventListener('click', resetGame);
