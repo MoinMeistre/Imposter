@@ -70,12 +70,13 @@ io.on('connection', (socket) => {
     });
 
 
-// Neues Spiel starten (zurücksetzen)
-socket.on('resetGame', () => {
-    players = [];
-    items = [];
-    gameStarted = false;
-    io.emit('gameReset'); // Allen Spielern mitteilen, dass das Spiel zurückgesetzt wurde
+// Neues Spiel zurücksetzen (Spieler und Status, aber nicht die Begriffe)
+    socket.on('resetGame', () => {
+    players = [];  // Spieler zurücksetzen
+    gameStarted = false; // Spielstatus zurücksetzen
+    
+    // Clients über das neue Spiel informieren + Begriffe erneut senden
+    io.emit('gameReset', { items });
 });
 
 
